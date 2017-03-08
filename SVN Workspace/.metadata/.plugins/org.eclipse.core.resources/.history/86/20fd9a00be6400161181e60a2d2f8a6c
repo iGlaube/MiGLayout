@@ -1,0 +1,301 @@
+package OnlineSolution;
+
+
+import javax.swing.UIManager;
+import javax.swing.UIManager.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+import java.util.ArrayList;
+import java.sql.SQLException;
+import javax.swing.JOptionPane;
+import javax.swing.UnsupportedLookAndFeelException;
+
+// run with this command or use your version of SQLite-JDBC
+// java -classpath ".;sqlite-jdbc-3.8.7.jar" InventoryController
+/** 
+ * Controller for Example InventoryGUI program designed for 
+ * <a href="http://www.reddit.com/r/javaexamples">/r/javaexamples</a>
+ * as an example of building a GUI to access a SQLite database.
+ * 
+ * @author /u/Philboyd_Studge
+ */
+public class InventoryController
+{
+	private final InventoryGUI frame = new InventoryGUI();
+	private InventoryDBAccessor dao;
+	private final ArrayList<Inventory> invList;
+	/** current displayed record index */
+	private int index;
+	/** flag for whether 'save' and 'cancel' commands should treat as an 'add' or 'edit' */
+	private boolean editNotAdd;
+
+        /**
+         * Default Constructor
+         * @throws SQLException 
+         */
+	public InventoryController() throws SQLException
+	{
+
+            initListeners();
+
+            dao = new InventoryDBAccessor();
+            invList = dao.loadInventoryFromDB();
+            dao.close();
+            index = 0;
+            editNotAdd = false;
+            frame.setVisible(true);
+	}
+
+        /**
+         * Initialize Event Listeners in InventoryGUI
+         */
+	private void initListeners()
+	{
+	// next button
+       	frame.addNextButtonActionListener((ActionEvent evt) ->
+        {
+            index++;
+            if (index >= invList.size()) index = 0;
+            getDataEntry();
+        });	
+
+       	// previous button
+        frame.addPrevButtonActionListener((ActionEvent evt) ->
+        {
+            index--;
+            if (index < 0) index = invList.size()-1;
+            getDataEntry();
+        });	
+
+        // 'add' button
+        frame.addAddButtonActionListener((ActionEvent evt) ->
+        {
+            frame.setEditing(true);
+            Inventory temp = new Inventory();
+            
+            // insert new object at head of list
+            index = 0;            
+            invList.add(index, temp);
+            getDataEntry();
+        });	
+
+        // edit button
+        frame.addEditButtonActionListener((ActionEvent evt) ->
+        {
+            editNotAdd = true;
+            frame.setEditing(true);
+        });	
+
+        // delete button
+        frame.addDeleteButtonActionListener((ActionEvent evt) -> {
+            int okCancel = JOptionPane.showConfirmDialog(frame,"Are you sure? This cannot be undone!"
+                    , "Delete record?" , JOptionPane.WARNING_MESSAGE, JOptionPane.OK_CANCEL_OPTION);
+            if (okCancel == JOptionPane.OK_OPTION)
+            {
+                try
+                {
+                    deleteFromDB(invList.get(index).getPartnum());
+                }
+                catch (SQLException e)
+                {
+                    System.err.println( e.getClass().getName() + ": " + e.getMessage() );
+                    JOptionPane.showMessageDialog(frame, "Database error : " + e.getMessage());
+                }
+                invList.remove(index);
+                index++;
+                if (index >= invList.size()) index = 0;
+                getDataEntry();
+            }
+               });
+
+        // save button
+        frame.addSaveButtonActionListener((ActionEvent evt) ->
+        {
+            Inventory temp = new Inventory();
+            boolean success = false;
+            try
+            {
+                success = setDataObject(temp);
+            }
+            catch (SQLException e)
+            {
+                System.err.println( e.getClass().getName() + ": " + e.getMessage() );
+                JOptionPane.showMessageDialog(frame, "Database error : " + e.getMessage());
+            }
+            if (success)
+            {
+                System.out.println("Save successfull.");
+                frame.setEditing(false);
+                if (editNotAdd) editNotAdd = false;
+            }
+        });	
+
+        // 'cancel' button
+        frame.addCancelButtonActionListener((ActionEvent evt) -> {
+            frame.setEditing(false);
+            if (editNotAdd)
+            {
+                editNotAdd = false;
+            }
+            else
+            {
+                invList.remove(index);
+            }
+            getDataEntry();
+               });	
+
+   	}
+
+        /**
+         * Replaces single quotes in description with two
+         * to prevent SQL error
+         * @param in String
+         * @return String
+         */
+        private String replaceSingleQuotes(String in)
+        {
+            return in.replace("'","''");
+        }
+        
+        /**
+         * Sets Data Object from text fields from InventoryGUI
+         * validates and sends to DB table
+         * 
+         * @param obj Inventory object
+         * @return <code>false</code> if not valid 
+         * @throws SQLException 
+         */
+	public boolean setDataObject(Inventory obj) throws SQLException
+	{
+            // TODO: validate length, special characters
+		String item = frame.getItem();
+
+		// validate item field
+		if (item.length() <= 3)
+		{
+			JOptionPane.showMessageDialog(frame, "Item name must be longer than 3 letters.");
+			return false;
+		}
+		obj.setItem(item);
+
+		// can be blank
+		obj.setDescription(replaceSingleQuotes(frame.getDescription()));
+
+		// validate Number fields
+		int qty;
+		float price;
+		try
+		{
+			qty = Integer.parseInt(frame.getQty());
+			price = Float.parseFloat(frame.getPrice().replace(",",""));
+		}
+		catch (NumberFormatException nfe)
+		{
+			JOptionPane.showMessageDialog(frame, "Incorrect data format " + nfe.getMessage());
+			return false;
+		}
+		obj.setQty(qty);
+		obj.setPrice(price);
+
+		// update or insert
+		if (editNotAdd)
+		{
+			obj.setPartnum(frame.getPartnum());
+			invList.set(index, obj);
+			updateDB(obj);
+		}
+		else
+		{
+			// generate new partnum
+			obj.setPartnum(obj.generatePartnum());
+			frame.setPartnum(obj.getPartnum());
+			invList.set(0, obj);
+			addToDB(obj);
+		}
+		return true;
+	}
+
+        /**
+         * Adds record to database table
+         * @param obj Inventory object
+         * @throws SQLException 
+         */
+	public void addToDB(Inventory obj) throws SQLException
+	{
+		System.out.println("Adding record to database...");
+		dao = new InventoryDBAccessor();
+		dao.addToDB(obj);
+		dao.close();
+	}
+
+        /**
+         * Updates record in database table
+         * @param obj Inventory object
+         * @throws SQLException 
+         */
+	public void updateDB(Inventory obj) throws SQLException
+	{
+		System.out.println("Updating record...");
+		dao = new InventoryDBAccessor();
+		dao.updateDB(obj);
+		dao.close();
+	}
+
+        /**
+         * Deletes record from database table
+         * @param partnum Unique primary key partnum
+         * @throws SQLException 
+         */
+	public void deleteFromDB(String partnum) throws SQLException
+	{
+		System.out.println("Deleting " + partnum + "...");
+		dao = new InventoryDBAccessor();
+		dao.deleteFromDB(partnum);
+		dao.close();
+	}
+
+        /**
+         * Gets data from ArrayList and fills text fields
+         * in InventoryGUI
+         */
+	public void getDataEntry()
+	{
+		if (invList.get(index)==null) return;
+		Inventory temp = invList.get(index);
+		frame.setPartnum(temp.getPartnum());
+		frame.setItem(temp.getItem());
+		frame.setDescription(temp.getDescription());
+		frame.setQty(temp.getQty());
+		frame.setPrice(temp.getPrice());
+		frame.setTotal(temp.getTotal());
+	}
+
+        /**
+         * main
+         * @param args not used
+         * @throws SQLException 
+         */
+	public static void main(String[] args) throws SQLException
+	{
+		try
+		{
+ 		   for (LookAndFeelInfo info : UIManager.getInstalledLookAndFeels())
+ 		   {
+        		if ("Nimbus".equals(info.getName()))
+        		{
+            		UIManager.setLookAndFeel(info.getClassName());
+            		break;
+        		}
+    		}
+		} 
+		catch (ClassNotFoundException | InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException e)
+		{
+                    // TODO: actual exception handling here
+                    System.exit(0);
+		}
+		InventoryController app = new InventoryController();
+		app.getDataEntry();
+
+	}
+}

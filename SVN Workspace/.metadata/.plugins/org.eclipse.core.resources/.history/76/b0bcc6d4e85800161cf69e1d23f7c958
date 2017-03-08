@@ -1,0 +1,38 @@
+package TesterMain;
+
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+public class buttonHandler implements ActionListener {
+	
+	WelcomeScreen ws = new WelcomeScreen();
+	
+	public void actionPerformed(ActionEvent e){
+		
+		if(e.getSource() == ws.okButton){
+			ws.frame.dispose();
+		}
+		
+	}
+
+	
+	
+//	
+//	
+//	private class buttonHandler implements ActionListener{
+//		WelcomeScreen ws = new WelcomeScreen();
+//
+//		@Override
+//		public void actionPerformed(ActionEvent e) {
+//			if(e.getSource() == ws.okButton){
+//				ws.frame.dispose();
+//			}
+//			
+//			
+////		}
+//	
+//		
+//	
+//	}
+
+}

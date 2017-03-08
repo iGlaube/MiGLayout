@@ -1,0 +1,43 @@
+package TesterMain;
+
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
+
+import net.miginfocom.swing.MigLayout;
+
+public class NewryScreen extends JFrame {
+	
+	public NewryScreen(){
+		
+		
+		
+		JFrame frame = new JFrame();
+		frame.setSize(500, 400);
+		frame.setVisible(true);
+		frame.setDefaultCloseOperation(frame.EXIT_ON_CLOSE);
+		frame.setTitle("Newry Printers");
+		
+		JPanel panel = new JPanel();
+		frame.add(panel);
+		
+		panel.setLayout(new MigLayout("", "", ""));
+		
+		//Row One
+		JLabel titleLabel = new JLabel();
+		titleLabel.setText("Newry Printers");
+		panel.add(titleLabel, "center, span 3, wrap 30");	//creates gap of 15 pixels between next row
+		//TODO - Font and styling
+		
+		
+		//Row Two
+		JLabel printerLabel = new JLabel("Printer Name");
+		panel.add(printerLabel, "left, span 2 ");
+		JTextField printerTF = new JTextField(20);
+		panel.add(printerTF, "span, pushx, growx");
+		
+		
+	}
+
+}

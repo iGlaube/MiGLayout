@@ -1,0 +1,81 @@
+//package gui2;
+//
+//import javax.swing.BorderFactory;
+//import javax.swing.JCheckBox;
+//import javax.swing.JFrame;
+//import javax.swing.JLabel;
+//import javax.swing.JPanel;
+//import javax.swing.JTextArea;
+//import javax.swing.JTextField;
+//
+//import net.miginfocom.swing.MigLayout;
+//
+//public class main {
+//	
+//	public static void main (String args[]){
+//		
+//		JFrame frame = new JFrame("GUI 2");
+//		frame.setDefaultCloseOperation(frame.EXIT_ON_CLOSE);
+//		frame.setSize(600, 300);
+//		frame.setVisible(true);
+//		
+//		JPanel panel = new JPanel();
+//		frame.add(panel);
+//	
+//			//--------Row 
+//	JLabel labelone = new JLabel("Printer");
+//	JTextField TFOne = new JTextField(20);
+//	
+//			//----------Row
+//	JLabel labeltwo = new JLabel("Ink");
+//	JTextField TFTwo = new JTextField(20);
+//	
+//	
+//	//-------Row
+//	JLabel labelFour = new JLabel("Ink");
+//	JTextField TFFour = new JTextField(20);
+//	
+//	//------Row
+//	
+//	JCheckBox textCheck = new JCheckBox();
+//			textCheck.setEnabled(true);
+//	JCheckBox emailCheck = new JCheckBox();
+//			emailCheck.setEnabled(true);
+//			
+//			
+//			//---------Row
+//	JLabel labelThree = new JLabel("Additional ");
+//	JTextArea textArea = new JTextArea(30, 20);
+//	textArea.setBorder(BorderFactory.createEtchedBorder());
+//	
+//	
+//	//---------Layout
+//	
+//	panel.setLayout(new MigLayout("","", ""));  //specify 3 columns but not explicitly specifying rows.
+//	
+//	//Row One
+//	panel.add(labelone, "split 2, sg a");
+//	panel.add(TFOne, "pushx, growx, wrap");
+//	
+//	//Row Two
+//	panel.add(labeltwo, "split 2, sg a");
+//	panel.add(TFTwo, "pushx, growx, wrap"); //wrap sets next component onto next line
+//		
+//	//Row Three
+//	panel.add(labelFour, "split 6, sg a");
+//	panel.add(TFFour, "pushx, growx");
+//	panel.add(new JLabel ("Text"));
+//	panel.add(textCheck);
+//	panel.add(new JLabel ("Email"));
+//	panel.add(emailCheck, "wrap");
+//	
+//	//Row Four
+//	panel.add(labelThree, "split 2, pushx, growx, wrap");
+//	panel.add(textArea, "span, push, grow"); //span goes across all available cells
+//	
+//	
+//	
+//	
+//
+//	}
+//}

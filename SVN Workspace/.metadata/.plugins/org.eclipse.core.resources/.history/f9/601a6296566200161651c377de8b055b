@@ -1,0 +1,64 @@
+package P5Q7;
+
+import java.io.InputStream;
+import java.util.Scanner;
+
+public class Car {
+	
+	public static final double BASIC_CAR = 11000;
+	public static final Scanner input = new Scanner(System.in);
+	
+
+	public static void main (String args[]){
+		
+		
+		System.out.println("Basic car model Costs: " + BASIC_CAR);
+		
+		basicCar();
+		System.out.println();
+		
+		question();
+		System.out.println("------------");
+		
+		
+
+		
+	}
+	
+	
+//	private static void qEngine(){
+//		Scanner qE = new Scanner (System.in);
+//		String response = qE.nextLine();
+//		
+//		if(response == "y" || response == "Y"){
+//			System.out.println("a. 1.4 litre");
+//			System.out.println("b. 1.8 litre ");
+//			System.out.println("c. nothing ");
+//		}
+//		try(Scanner in = new Scanner(System.in)){
+//			String answer = in.nextLine();
+//			if(answer.equals("a")){
+//			}
+//		}
+		
+		
+		
+//	}
+	
+	private  void eOne(Scanner in){
+		System.out.println("Enter corresponding letter for your upgrade.");
+		String eUpgrade = in.nextLine();
+		
+	}
+	private static void basicCar(){
+		System.out.println("This includes:");
+		System.out.println(" - 1.2l petrol engine" + "\n" + " - Silver Colour");
+	}
+	
+
+	private static void question(){
+		System.out.println("Would you like to upgrade the engine?");
+		System.out.println("y for yes");
+		System.out.println("n for no");
+	}
+}

@@ -1,0 +1,34 @@
+package TesterMain;
+
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+
+import net.miginfocom.swing.MigLayout;
+
+public class StockManager extends JFrame{
+	
+
+	public StockManager(){
+	JFrame frame = new JFrame();
+	JPanel panel = new JPanel();
+	
+	frame.setSize(500, 300);
+	frame.setVisible(true);
+	frame.setDefaultCloseOperation(frame.EXIT_ON_CLOSE);
+	frame.setTitle("Stock Manager");
+	frame.add(panel);
+	
+	panel.setLayout(new MigLayout("debug", "", ""));
+	
+	JLabel title = new JLabel("Stock Manager");
+	panel.add(title, "center", "growx", "pushx");
+	
+	JLabel printerLabel = new JLabel("Printer Name: ");
+	printerLabel.
+	
+	}
+
+	
+	
+}

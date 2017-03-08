@@ -1,0 +1,43 @@
+package TesterMain;
+
+import java.awt.event.KeyEvent;
+
+import javax.swing.JFrame;
+import javax.swing.JMenu;
+import javax.swing.JPanel;
+import javax.swing.JTabbedPane;
+
+import net.miginfocom.swing.MigLayout;
+
+public class newItems extends JFrame {
+	
+	
+	public newItems(){
+		
+		JFrame itemFrame = new JFrame();
+		itemFrame.setSize(500, 400);
+		itemFrame.setVisible(true);
+		itemFrame.setDefaultCloseOperation(itemFrame.EXIT_ON_CLOSE);
+		itemFrame.setTitle("Ink");
+		
+		JPanel itemPanel = new JPanel();
+		itemFrame.add(itemPanel);
+		
+		itemPanel.setLayout(new MigLayout("", "", ""));
+		
+		
+		JTabbedPane tPane = new JTabbedPane();
+		tPane.addTab("Printer", null, itemPanel, "Add Printer");
+		
+		JMenu printerMenu = new JMenu("Printer");
+		printerMenu.setMnemonic(KeyEvent.VK_F1);
+		
+		JMenu inkMenu = new JMenu("Ink");
+		inkMenu.setMnemonic(KeyEvent.VK_F2);
+		itemPanel.add(printerMenu);
+		
+		
+		
+	}
+
+}

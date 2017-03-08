@@ -1,0 +1,34 @@
+package P5Q7;
+
+import java.io.InputStream;
+import java.util.Scanner;
+
+public class Car {
+	
+	private static final int BASIC_CAR = 11000;
+
+	public static void main (String args[]){
+		
+		System.out.println("BASIC CAR MODEL COSTS: " + BASIC_CAR);
+		System.out.println("It includes: " + "\n" + " - 1.2l petrol engine" + "\n" + " - Silver Colour");
+		
+		System.out.println("Would you like to upgrade the engine?");
+		System.out.println("Y for yes" + "\n" + "N for no");
+		
+		Scanner question  = new Scanner(System.in);
+		String answer = question.nextLine();
+		answer.toUpperCase();
+		
+		if(answer == "Y"){
+			System.out.println("What engine upgrade would you like?");
+			System.out.println("a. 1.4l petrol (add £200");
+			System.out.println("b. 1.5l pertrol (add £400");
+			System.out.println("c. 1.7l petrol (add £600");
+		}
+		
+		
+		
+	}
+	
+	
+}

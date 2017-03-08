@@ -1,0 +1,22 @@
+package TesterMain;
+
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+
+public class StockManager extends JFrame{
+	
+
+	public StockManager(){
+	JFrame frame = new JFrame();
+	JPanel panel = new JPanel();
+	
+	frame.setSize(500, 300);
+	frame.setVisible(true);
+	frame.setDefaultCloseOperation(frame.EXIT_ON_CLOSE);
+	frame.
+	
+	}
+
+	
+	
+}
